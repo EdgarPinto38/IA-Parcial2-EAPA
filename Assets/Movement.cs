@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    private float moveInputX;
+    private float moveInputY;
     public float speed;
-    void Update()
-    {
-        var Vertical = Input.GetAxis("Vertical");
-        var Horizontal = Input.GetAxis("Horizontal");
+    private Rigidbody2D rb;
 
-        transform.position = ((Horizontal, Vertical, 0) * speed * Time.deltaTime);
-        
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update() 
+    {
+        moveInputX = Input.GetAxisRaw("Horizontal");
+        moveInputY = Input.GetAxisRaw("Vertical");
+        rb.velocity = new Vector2(moveInputX * speed, moveInputY * speed    );
     }
 }
