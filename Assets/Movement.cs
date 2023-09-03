@@ -1,23 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private float moveInputX;
-    private float moveInputY;
-    public float speed;
-    private Rigidbody2D rb;
-
-    private void Start()
+    private Vector3 _previous;
+    public Vector3 Tposition;
+    public Vector3 velocity;
+    
+    private void Update()
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        var mousePos = Input.mousePosition;
+        mousePos.z = 0;
+        var worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+        
+        var mouseInputX= Input.GetAxisRaw("Horizontal");
+        var mouseInputY = Input.GetAxisRaw("Vertical");
+        
+        transform.position = new Vector3(worldPosition.x, worldPosition.y, 0);
+        
+        velocity = ((transform.position-_previous)) / Time.deltaTime;
+        _previous = transform.position;
 
-    private void Update() 
-    {
-        moveInputX = Input.GetAxisRaw("Horizontal");
-        moveInputY = Input.GetAxisRaw("Vertical");
-        rb.velocity = new Vector2(moveInputX * speed, moveInputY * speed    );
+        Tposition = transform.position + velocity;
     }
 }

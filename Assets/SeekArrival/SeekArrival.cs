@@ -20,15 +20,12 @@ public class SeekArrival : MonoBehaviour
         Vector3 steering = desired_velocity - Velocity;
 
         var distance = Vector3.Distance(transform.position, target.position);
-        Debug.Log(distance);
         if(distance <= slowingRadius)
         {
-            Debug.Log("Frena");
-            desired_velocity = (desired_velocity).normalized * max_speed * (distance / slowingRadius);
+            desired_velocity = (desired_velocity).normalized * (max_speed * (distance / slowingRadius));
         }
         else
         {
-            Debug.Log("Normal");
             desired_velocity = (desired_velocity).normalized * max_speed;
         }
 
