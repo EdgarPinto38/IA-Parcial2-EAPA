@@ -4,31 +4,45 @@ using UnityEngine;
 
 public class RunAwayArrival : MonoBehaviour
 {
-    [SerializeField]
-    private Transform target;
-    [SerializeField]
-    private float max_speed;
-    [SerializeField]
-    private Vector3 Velocity;
-    [SerializeField]
-    private float slowingRadius;
+    [SerializeField] private Vector3 velocity;
+    [SerializeField] public Transform target;
+    [SerializeField] private float max_speed;
+    [SerializeField] private float slowingDownRatio;
 
+    private void Start()
+    {
+
+    }
+    // Update is called once per frame
     void Update()
     {
-        Vector3 position = transform.position;
-        Vector3 fleeDesiredVelocity = (position - target.position).normalized * max_speed;
-        Vector3 seekDesiredVelocity = fleeDesiredVelocity - Velocity;
-        Velocity = Vector2.ClampMagnitude(Velocity + seekDesiredVelocity, max_speed);
+        //Steering
+        Vector3 desired_velocity = (transform.position - target.position);
 
-        var distance = Vector3.Distance(transform.position, target.position);
-        if (distance <= slowingRadius)
+        float distance = desired_velocity.magnitude;
+
+
+
+        if (distance > slowingDownRatio)
         {
-            fleeDesiredVelocity = (fleeDesiredVelocity).normalized * (max_speed * (distance / slowingRadius));
-            transform.position += fleeDesiredVelocity * Time.deltaTime;
+            desired_velocity = desired_velocity.normalized * max_speed * (slowingDownRatio / distance);
+            if (distance > slowingDownRatio * 6)
+            {
+                desired_velocity = Vector3.zero;
+            }
+            Debug.Log("Fuera");
         }
-        if (distance > slowingRadius)
+        else
         {
-            transform.position += Velocity * Time.deltaTime;
+            Debug.Log("Dentro");
+            desired_velocity = desired_velocity.normalized * max_speed;
         }
+
+        Vector3 steering = desired_velocity - velocity;
+
+        velocity = Vector3.ClampMagnitude(velocity + steering, max_speed);
+
+
+        transform.position += velocity * Time.deltaTime;
     }
 }

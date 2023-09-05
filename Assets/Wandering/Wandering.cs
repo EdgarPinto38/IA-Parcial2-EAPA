@@ -44,7 +44,7 @@ public class Wandering : MonoBehaviour
      Vector3 WanderForce()
     {
         Vector3 circleCenter = _velocity.normalized * circleDistance;
-        Vector3 displacement = Vector3.forward * radio;
+        Vector3 displacement = _velocity.normalized * radio;
         Quaternion rotation = Quaternion.AngleAxis(_angle, Vector3.up);
         displacement = rotation * displacement;
         DrawVectors(circleCenter, displacement);
